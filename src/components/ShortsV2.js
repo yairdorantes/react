@@ -73,10 +73,6 @@ const ShortsV2 = () => {
     console.log(stop);
   };
 
-  const openModal = (e) => {
-    // e.preventDefault();
-    modalIsOpen ? setModalIsOpen(false) : setModalIsOpen(true);
-  };
   return (
     <>
       {correct && console.log("correct")}

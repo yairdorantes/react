@@ -65,7 +65,7 @@ const Menu = () => {
           </div>
 
           <div>
-            <Link to="/" className="link">
+            <Link to="/posts" className="link">
               <div className="square-background">
                 <div className="container-data-menu-option">
                   <div className="container-img-menu">

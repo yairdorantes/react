@@ -56,18 +56,9 @@ const Cards = () => {
             <Loader></Loader>
           ) : (
             cards.cards.map((card, key) => {
-              // cont++;
-              // if (cont === arr.length) {
-              //   cont = 0;
-              // }
-              //console.log(card);
               return (
                 <SwiperSlide
                   style={{
-                    // borderWidth: "1px",
-                    // borderheight: "1px",
-                    // borderStyle: "solid",
-                    // backgroundColor: `${arr[cont]}`,
                     borderColor: "white",
                     backgroundImage: "url(" + card.imageURL + ")",
                   }}

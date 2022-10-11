@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 import PrivateRoute from "./PrivateRoute";
 import ShortsV2 from "../components/ShortsV2";
+import Posts from "../components/Posts";
 const Routers = () => {
   const navigate = useNavigate();
 
@@ -27,6 +28,7 @@ const Routers = () => {
           <Route path="/exercises" element={<Exercises />}></Route>
           <Route path="/listening" element={<Listening />}></Route>
           <Route path="/shorts" element={<ShortsV2 />}></Route>
+          <Route path="/posts" element={<Posts />}></Route>
           <Route path="/menu" element={<Menu />}></Route>
         </Route>
       </Routes>
