@@ -16,6 +16,7 @@ const params = {
 const Posts = () => {
   let { user } = useContext(AuthContext);
   const [likes, setLikes] = useState([]);
+
   const [posts, setPosts] = useState();
   const [heartActive, setHeartActive] = useState(false);
 
@@ -31,14 +32,31 @@ const Posts = () => {
     fetchAPi();
   }, []);
 
-  const giveLike = (value) => {
-    let options = {
-      body: { is_like: true, id: value.id, user_id: user.user_id },
-      headers: { "content-type": "application/json" },
-    };
-    helpHttp()
-      .post(like, options)
-      .then((res) => console.log(res));
+  const handleLike = (post) => {
+    let index = likes.findIndex((x) => x === post.id);
+    if (index >= 0) {
+      likes.splice(index, 1);
+      post.likes_count -= 1;
+      let options = {
+        body: { is_like: false, id: post.id, user_id: user.user_id },
+        headers: { "content-type": "application/json" },
+      };
+      helpHttp()
+        .post(like, options)
+        .then((res) => console.log(res));
+    } else {
+      likes.push(post.id);
+      post.likes_count += 1;
+      let options = {
+        body: { is_like: true, id: post.id, user_id: user.user_id },
+        headers: { "content-type": "application/json" },
+      };
+      helpHttp()
+        .post(like, options)
+        .then((res) => console.log(res));
+    }
+    setLikes([...likes]);
+    console.log(likes);
   };
 
   return (
@@ -63,11 +81,26 @@ const Posts = () => {
                   </h4>
                 </div>
                 <div className="like-post">
-                  <Heart
+                  {/* <Heart
                     style={{ width: "20px" }}
                     isActive={heartActive}
                     onClick={() => giveLike(post)}
-                  />
+                  /> */}
+
+                  {likes.findIndex((x) => x === post.id) >= 0 ? (
+                    <Heart
+                      onClick={handleLike.bind(this, post)}
+                      style={{ width: "20px" }}
+                      isActive={true}
+                    />
+                  ) : (
+                    <Heart
+                      onClick={handleLike.bind(this, post)}
+                      style={{ width: "20px" }}
+                      isActive={false}
+                    />
+                  )}
+
                   <div className="number-likes-post">
                     {post.likes_count} likes
                   </div>
