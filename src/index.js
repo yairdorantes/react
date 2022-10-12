@@ -9,18 +9,16 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <PayPalScriptProvider
-        options={{
-          "client-id":
-            "AWYnRL-IaoMzV_g06MQN-nkIpxi38HNR43onxwb6kns-lLsMTJD0WFOoQysHVmL5i8IfTVAVqfCAa-wM",
-        }}
-      >
-        <App />
-      </PayPalScriptProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <PayPalScriptProvider
+      options={{
+        "client-id":
+          "AWYnRL-IaoMzV_g06MQN-nkIpxi38HNR43onxwb6kns-lLsMTJD0WFOoQysHVmL5i8IfTVAVqfCAa-wM",
+      }}
+    >
+      <App />
+    </PayPalScriptProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

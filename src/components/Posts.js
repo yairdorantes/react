@@ -1,11 +1,10 @@
-import example from "../media/a4.jpg";
 import { useContext, useEffect, useState } from "react";
 import Heart from "react-heart";
-import hearts from "../media/heart.svg";
 import Loader from "./Loader";
 import { helpHttp } from "../helpers/helpHttp";
 import AuthContext from "../context/AuthContext";
 
+let url = `http://127.0.0.1:8000/api/postset/`;
 let like = "http://127.0.0.1:8000/api/posts/";
 const params = {
   method: "GET",
@@ -15,21 +14,32 @@ const params = {
 };
 const Posts = () => {
   let { user } = useContext(AuthContext);
+  let likedPosts = `http://127.0.0.1:8000/api/posts/${user.user_id}`;
+
   const [likes, setLikes] = useState([]);
 
   const [posts, setPosts] = useState();
-  const [heartActive, setHeartActive] = useState(false);
 
   const fetchAPi = async () => {
-    let url = `http://127.0.0.1:8000/api/postset/`;
     const response = await fetch(url, params);
     const responseJSON = await response.json();
     setPosts(responseJSON);
-    console.log(responseJSON);
+    // console.log(responseJSON);
+  };
+
+  const getLikedPosts = async () => {
+    const response = await fetch(likedPosts, params);
+    const responseJSON = await response.json();
+    // setPosts(responseJSON);
+    // console.log("liked", responseJSON);
+    responseJSON.posts_liked_by_user.map((post) => likes.push(post.id));
+    setLikes([...likes]);
+    console.log(likes);
   };
 
   useEffect(() => {
     fetchAPi();
+    getLikedPosts();
   }, []);
 
   const handleLike = (post) => {
@@ -43,7 +53,8 @@ const Posts = () => {
       };
       helpHttp()
         .post(like, options)
-        .then((res) => console.log(res));
+        .then((res) => console.log(res.message));
+      console.log(likes);
     } else {
       likes.push(post.id);
       post.likes_count += 1;
@@ -53,10 +64,10 @@ const Posts = () => {
       };
       helpHttp()
         .post(like, options)
-        .then((res) => console.log(res));
+        .then((res) => console.log(res.message));
     }
     setLikes([...likes]);
-    console.log(likes);
+    // console.log(likes);
   };
 
   return (
@@ -81,12 +92,6 @@ const Posts = () => {
                   </h4>
                 </div>
                 <div className="like-post">
-                  {/* <Heart
-                    style={{ width: "20px" }}
-                    isActive={heartActive}
-                    onClick={() => giveLike(post)}
-                  /> */}
-
                   {likes.findIndex((x) => x === post.id) >= 0 ? (
                     <Heart
                       onClick={handleLike.bind(this, post)}
