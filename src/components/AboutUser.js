@@ -61,6 +61,7 @@ const AboutUser = () => {
         >
           <div className="container-info-inside-modal">
             <div>
+              <p></p>
               <h2 className="textito">¡ Bienvenido {user.username} !</h2>
             </div>
             <div className="user-is-vip">

@@ -1,11 +1,12 @@
 import example from "../media/a4.jpg";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Heart from "react-heart";
 import hearts from "../media/heart.svg";
-
 import Loader from "./Loader";
+import { helpHttp } from "../helpers/helpHttp";
+import AuthContext from "../context/AuthContext";
 
-let url = "http://127.0.0.1:8000/api/postset/";
+let like = "http://127.0.0.1:8000/api/posts/";
 const params = {
   method: "GET",
   headers: {
@@ -13,10 +14,13 @@ const params = {
   },
 };
 const Posts = () => {
+  let { user } = useContext(AuthContext);
+  const [likes, setLikes] = useState([]);
   const [posts, setPosts] = useState();
   const [heartActive, setHeartActive] = useState(false);
 
   const fetchAPi = async () => {
+    let url = `http://127.0.0.1:8000/api/postset/`;
     const response = await fetch(url, params);
     const responseJSON = await response.json();
     setPosts(responseJSON);
@@ -26,6 +30,16 @@ const Posts = () => {
   useEffect(() => {
     fetchAPi();
   }, []);
+
+  const giveLike = (value) => {
+    let options = {
+      body: { is_like: true, id: value.id, user_id: user.user_id },
+      headers: { "content-type": "application/json" },
+    };
+    helpHttp()
+      .post(like, options)
+      .then((res) => console.log(res));
+  };
 
   return (
     <>
@@ -52,9 +66,11 @@ const Posts = () => {
                   <Heart
                     style={{ width: "20px" }}
                     isActive={heartActive}
-                    onClick={() => setHeartActive(!heartActive)}
+                    onClick={() => giveLike(post)}
                   />
-                  <div className="number-likes-post">10 likes</div>
+                  <div className="number-likes-post">
+                    {post.likes_count} likes
+                  </div>
                 </div>
               </div>
             );
