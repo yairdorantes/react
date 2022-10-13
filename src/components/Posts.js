@@ -3,7 +3,8 @@ import Heart from "react-heart";
 import Loader from "./Loader";
 import { helpHttp } from "../helpers/helpHttp";
 import AuthContext from "../context/AuthContext";
-
+import PostPage from "./PostPage";
+import { Link } from "react-router-dom";
 let url = `http://127.0.0.1:8000/api/postset/`;
 let like = "http://127.0.0.1:8000/api/posts/";
 const params = {
@@ -79,18 +80,26 @@ const Posts = () => {
           posts.map((post) => {
             return (
               <div key={post.id} className="card-post">
-                <img
-                  className="image-post"
-                  src={post.image_src}
-                  alt="Avatar"
-                  style={{ width: "100%", maxHeight: "100px" }}
-                />
-                <div className="section-post">{post.categoria.name}</div>
-                <div className="container-card-text">
-                  <h4>
-                    <b>{post.title}</b>
-                  </h4>
-                </div>
+                <Link to={`/postpage/${post.id}`} className="link-post">
+                  <img
+                    className="image-post"
+                    src={post.image_src}
+                    alt="Avatar"
+                    style={{ width: "100%", maxHeight: "100px" }}
+                  />
+                  <div
+                    style={{ backgroundColor: `${post.categoria.color}` }}
+                    className="section-post"
+                  >
+                    {post.categoria.name}
+                  </div>
+                  <div className="container-card-text">
+                    <h4>
+                      <b>{post.title}</b>
+                    </h4>
+                  </div>
+                </Link>
+
                 <div className="like-post">
                   {likes.findIndex((x) => x === post.id) >= 0 ? (
                     <Heart
@@ -107,7 +116,7 @@ const Posts = () => {
                   )}
 
                   <div className="number-likes-post">
-                    {post.likes_count} likes
+                    {post.likes_count} Likes
                   </div>
                 </div>
               </div>
