@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/effect-cards";
 import "./styles/stylesCards.css";
 
-import { EffectCards, Mousewheel } from "swiper";
+import { Pagination, EffectCards, Mousewheel, Keyboard } from "swiper";
 import wordSound from "../media/cards/audio.png";
 
 import Loader from "./Loader";
@@ -47,10 +47,11 @@ const Cards = () => {
 
       <div className="all-cards">
         <Swiper
+          keyboard={true}
           mousewheel={true}
           className="mySwiper"
           effect={"cards"}
-          modules={[EffectCards, Mousewheel]}
+          modules={[EffectCards, Mousewheel, Pagination, Keyboard]}
         >
           {!cards ? (
             <Loader></Loader>

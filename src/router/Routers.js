@@ -29,7 +29,7 @@ const Routers = () => {
           <Route path="/shorts" element={<ShortsV2 />}></Route>
           <Route path="/posts" element={<Posts />}></Route>
           <Route path="/postpage/:id" element={<PostPage />}></Route>
-          <Route path="/" element={<Menu />}></Route>
+          <Route path="/menu" element={<Menu />}></Route>
         </Route>
       </Routes>
     </AuthProvider>

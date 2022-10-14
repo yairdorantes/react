@@ -150,7 +150,7 @@ const ShortsV2 = () => {
                     <video
                       onClick={PlayBtn}
                       src={short.short_url}
-                      controls
+                      // controls
                       // loop
                     ></video>
                     <div>
