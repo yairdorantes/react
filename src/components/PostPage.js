@@ -1,20 +1,17 @@
+import "./singlePost.css";
+import send from "../media/send.png";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "./Loader";
 import { helpHttp } from "../helpers/helpHttp";
 import AuthContext from "../context/AuthContext";
+import { InView } from "react-intersection-observer";
 let url = "http://127.0.0.1:8000/api/comments/";
-
 const parametros = {
   method: "GET",
   headers: {
     accept: "application/json",
   },
-};
-let initialComment = {
-  author: "",
-  text: "",
-  created_date: "",
 };
 
 const PostPage = () => {
@@ -24,6 +21,7 @@ const PostPage = () => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
   const params = useParams();
+  const [fetchedComments, setFetchedComments] = useState(false);
 
   const getDate = () => {
     const fecha = new Date();
@@ -63,7 +61,7 @@ const PostPage = () => {
     const response = await fetch(url, parametros);
     const responseJSON = await response.json();
     setComments(responseJSON.comments);
-    console.log(responseJSON.comments);
+    setFetchedComments(true); //
   };
 
   const getCommentContent = (e) => {
@@ -71,7 +69,7 @@ const PostPage = () => {
     // console.log(e.target.value);
   };
 
-  const sendComment = async () => {
+  const sendComment = () => {
     let options = {
       body: {
         post_id: params.id,
@@ -91,15 +89,15 @@ const PostPage = () => {
       text: comment,
       created_date: getDate(),
     };
-
-    comments.push(testing);
+    // console.log(comments);
+    comments.unshift(testing);
     setComments([...comments]);
+    setComment("");
     console.log(comments);
   };
 
   useEffect(() => {
     fetchAPi();
-    fetchComments();
   }, []);
 
   return (
@@ -108,41 +106,65 @@ const PostPage = () => {
         {!post ? (
           <Loader></Loader>
         ) : (
-          <div className="container-post-content">
-            <h4>{post.title}</h4>
-            <div className="container-post-content-img">
-              <img src={post.image_src} alt="" />
+          <div className="post-content">
+            <h1 className="title-post">{post.title}</h1>
+            <div className="box-image-post">
+              <img className="image-single-post" src={post.image_src} />
             </div>
-            <div className="box-text-post">{post.content}</div>
 
+            <div className="box-text-post">{post.content}</div>
             <section>
-              <div className="comment-section">
-                <div>comentar como: {user.username}</div>
-                <button onClick={sendComment}>jaja</button>
-                <textarea
-                  name="comment"
-                  id="comment"
-                  cols="30"
-                  rows="10"
-                  value={comment}
-                  onChange={getCommentContent}
-                ></textarea>
-              </div>
-              <div className="all-commets">
-                {comments ? (
-                  comments.map((res, id) => {
-                    return (
-                      <div key={id}>
-                        <div>{res.author}</div>
-                        <div>{res.created_date}</div>
-                        <div className="post-comment">{res.text}</div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div>No commens</div>
-                )}
-              </div>
+              <InView
+                as="div"
+                onChange={(inView) => {
+                  inView && !fetchedComments && fetchComments();
+                }}
+              >
+                <div className="comment-section">
+                  <input
+                    autoComplete="off"
+                    className="comment-input"
+                    placeholder={`Si puedes aportar algo más, coméntalo!...`}
+                    name="comment"
+                    id="comment"
+                    // cols="30"
+                    // rows="10"
+                    value={comment}
+                    onChange={getCommentContent}
+                  ></input>
+                  <img
+                    onClick={sendComment}
+                    className={
+                      comment.length > 0
+                        ? "btn-send-comment"
+                        : "btn-send-comment hidden"
+                    }
+                    src={send}
+                    alt=""
+                  />
+                </div>
+
+                <div className="all-commets">
+                  {comments.length > 0 ? (
+                    comments.map((res, id) => {
+                      return (
+                        <div className="lone-comment" key={id}>
+                          <div className="author-comment">
+                            {res.author}{" "}
+                            <span className="date-comment">
+                              {" "}
+                              {res.created_date}
+                            </span>
+                          </div>
+                          <div className="post-comment">{res.text}</div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div>No commens</div>
+                  )}
+                </div>
+              </InView>
             </section>
           </div>
         )}

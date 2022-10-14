@@ -32,7 +32,6 @@ const Shorts = () => {
     fetchAPi();
   }, []);
   useEffect(() => {
-    console.log(currentVideo);
     console.log(document.getElementById("10"));
   }, [currentVideo]);
 
@@ -68,7 +67,6 @@ const Shorts = () => {
                 <InView
                   as="div"
                   onChange={(inView, entry) => {
-                    console.log(inView);
                     // console.log(inView);
                     var video = entry.target.querySelector("video");
 

@@ -35,7 +35,6 @@ const Posts = () => {
     // console.log("liked", responseJSON);
     responseJSON.posts_liked_by_user.map((post) => likes.push(post.id));
     setLikes([...likes]);
-    console.log(likes);
   };
 
   useEffect(() => {
@@ -55,7 +54,6 @@ const Posts = () => {
       helpHttp()
         .post(like, options)
         .then((res) => console.log(res.message));
-      console.log(likes);
     } else {
       likes.push(post.id);
       post.likes_count += 1;
@@ -94,29 +92,28 @@ const Posts = () => {
                     {post.categoria.name}
                   </div>
                   <div className="container-card-text">
-                    <h4>
-                      <b>{post.title}</b>
-                    </h4>
+                    <h3 className="title-post-card">{post.title}</h3>
                   </div>
                 </Link>
 
                 <div className="like-post">
-                  {likes.findIndex((x) => x === post.id) >= 0 ? (
-                    <Heart
-                      onClick={handleLike.bind(this, post)}
-                      style={{ width: "20px" }}
-                      isActive={true}
-                    />
-                  ) : (
-                    <Heart
-                      onClick={handleLike.bind(this, post)}
-                      style={{ width: "20px" }}
-                      isActive={false}
-                    />
-                  )}
-
-                  <div className="number-likes-post">
-                    {post.likes_count} Likes
+                  <div className="heart-box">
+                    {likes.findIndex((x) => x === post.id) >= 0 ? (
+                      <Heart
+                        onClick={handleLike.bind(this, post)}
+                        style={{ width: "20px" }}
+                        isActive={true}
+                      />
+                    ) : (
+                      <Heart
+                        onClick={handleLike.bind(this, post)}
+                        style={{ width: "20px" }}
+                        isActive={false}
+                      />
+                    )}
+                    <div className="number-likes-post">
+                      {post.likes_count} Likes
+                    </div>
                   </div>
                 </div>
               </div>
