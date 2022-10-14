@@ -1,9 +1,9 @@
+import "./styles/postCards.css";
 import { useContext, useEffect, useState } from "react";
 import Heart from "react-heart";
 import Loader from "./Loader";
 import { helpHttp } from "../helpers/helpHttp";
 import AuthContext from "../context/AuthContext";
-import PostPage from "./PostPage";
 import { Link } from "react-router-dom";
 let url = `http://127.0.0.1:8000/api/postset/`;
 let like = "http://127.0.0.1:8000/api/posts/";

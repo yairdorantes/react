@@ -1,3 +1,4 @@
+import "./styles/menuStyles.css";
 import cards from "../media/cardss.png";
 import video from "../media/play.png";
 import tips from "../media/tips.png";

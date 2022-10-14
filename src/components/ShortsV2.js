@@ -1,3 +1,4 @@
+import "./styles/shortStyles.css";
 import { InView } from "react-intersection-observer";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Mousewheel, Pagination, Keyboard } from "swiper";
@@ -19,8 +20,9 @@ const ShortsV2 = () => {
   const [shorts, setShorts] = useState([]);
   const [videoIsEnd, setVideoIsEnd] = useState(false);
   const [btnTranscription, setBtnTranscription] = useState(false);
-  const [correct, setCorrect] = useState(false);
+  const [correct, setCorrect] = useState();
   const [stop, setStop] = useState(true);
+  const [answerAlreadySent, setAnswerAlreadySent] = useState(false);
   const fetchAPi = async () => {
     const response = await fetch(url);
     const responseJSON = await response.json();
@@ -52,9 +54,10 @@ const ShortsV2 = () => {
 
   const getValue = () => {
     setBtnTranscription(false);
-    console.log(answerSelected, correctAnswer);
-
-    answerSelected == correctAnswer ? setCorrect(true) : alert("fail");
+    setAnswerAlreadySent(true);
+    console.log(correctAnswer);
+    console.log(answerSelected);
+    answerSelected == correctAnswer ? setCorrect(true) : setCorrect(false);
   };
 
   const advance = () => {
@@ -77,20 +80,20 @@ const ShortsV2 = () => {
     <>
       {correct && console.log("correct")}
       <Swiper
-        cssMode={true}
         keyboard={true}
         mousewheel={true}
         style={{ height: "100vh" }}
         className="swiper-shorts"
-        // pagination={true}
-        direction={"vertical"}
-        noSwiping={true}
-        noSwipingClass={"swiper-slide"}
-        // allowTouchMove={false}
-        pagination={{ clickable: true }}
         slidesPerView={1}
         spaceBetween={30}
         modules={[Pagination, Mousewheel, Keyboard]}
+        // cssMode={true}
+        // pagination={true}
+        // direction={"vertical"}
+        // noSwiping={true}
+        // noSwipingClass={"swiper-slide"}
+        // allowTouchMove={false}
+        // pagination={{ clickable: true }}
       >
         {!shorts ? (
           <Loader></Loader>
@@ -110,13 +113,16 @@ const ShortsV2 = () => {
                         console.log(e);
                       });
 
+                      // console.log("en vista");
                       short.answers.map((answer) => {
+                        // console.log(answer.is_correct);
                         answer.is_correct === true &&
                           setCorrectAnswer(answer.id);
+                        // console.log("correcta puesta", correctAnswer);
                       });
 
                       video.onended = function (e) {
-                        console.log("termino");
+                        // console.log("termino");
                         setVideoIsEnd(true);
                         console.log(e);
                         setBtnTranscription(true);
@@ -127,6 +133,16 @@ const ShortsV2 = () => {
                       };
                     } else {
                       video.pause();
+
+                      setShow(false);
+                      //setCorrectAnswer(0);
+                      // setAnswerSelected();
+                      setDisabledBtnSendAnswer(true);
+
+                      setVideoIsEnd(false);
+                      setBtnTranscription(false);
+                      //  setCorrect();
+                      setAnswerAlreadySent(false);
                     }
                   }}
                 >
@@ -151,42 +167,24 @@ const ShortsV2 = () => {
                           className="btn-control-video"
                           onClick={goBack}
                         >
-                          <img style={{ width: "20px" }} src={left} alt="" />
+                          <img style={{ width: "25px" }} src={left} alt="" />
                         </button>
                         <button className="btn-control-video" onClick={advance}>
-                          <img style={{ width: "20px" }} src={right} alt="" />
+                          <img style={{ width: "25px" }} src={right} alt="" />
                         </button>
                       </div>
                     </div>
+                    <div className="container-question-answer">
+                      <h3
+                        className={
+                          videoIsEnd
+                            ? "container-question"
+                            : "container-question hidden"
+                        }
+                      >
+                        {short.question}
+                      </h3>
 
-                    <div className="container-text-short">
-                      <div>
-                        <p
-                          className={
-                            show
-                              ? `transcription-short`
-                              : "transcription-short hidden"
-                          }
-                        >
-                          {short.translation}
-                        </p>
-                        <div
-                        // className={
-                        //   videoIsEnd
-                        //     ? "container-question"
-                        //     : "container-question hidden"
-                        // }
-                        ></div>
-                        <h3
-                          className={
-                            videoIsEnd
-                              ? "container-question"
-                              : "container-question hidden"
-                          }
-                        >
-                          {short.question}
-                        </h3>
-                      </div>
                       <br />
                       <div>
                         <div
@@ -216,8 +214,6 @@ const ShortsV2 = () => {
                               </label>
                             );
                           })}
-                        </div>
-                        <div className="container-btn-arrows">
                           <div
                             className={
                               videoIsEnd
@@ -230,12 +226,37 @@ const ShortsV2 = () => {
                               className="send-answer"
                               onClick={getValue}
                             >
-                              send
+                              Enviar
                             </button>
+                            <div
+                              className={
+                                answerAlreadySent
+                                  ? correct
+                                    ? "answer-sent is-correct"
+                                    : "answer-sent is-wrong"
+                                  : "hide-mgs-answer"
+                              }
+                            >
+                              {correct ? "¡Correcto!" : "¡Incorrecto!"}
+                            </div>
                           </div>
                         </div>
                       </div>
+                      <div className="container-text-short">
+                        <div>
+                          <p
+                            className={
+                              show
+                                ? `transcription-short`
+                                : "transcription-short hidden"
+                            }
+                          >
+                            {short.translation}
+                          </p>
+                        </div>
+                      </div>
                     </div>
+
                     {/* </Modal> */}
                   </div>
                 </InView>

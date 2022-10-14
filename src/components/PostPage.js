@@ -1,4 +1,4 @@
-import "./singlePost.css";
+import "./styles/singlePost.css";
 import send from "../media/send.png";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";

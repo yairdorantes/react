@@ -82,3 +82,6 @@
   margin-top: 8px;
   font-size: 20px;
 }
+.comment-input::placeholder {
+  color: rgb(158, 158, 158);
+}

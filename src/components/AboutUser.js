@@ -1,3 +1,4 @@
+import "./styles/modalStyles.css";
 import usuario from "../media/user.png";
 import Modal from "react-modal";
 import { useContext, useEffect, useState } from "react";

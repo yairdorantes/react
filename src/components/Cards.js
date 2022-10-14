@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-
+import "./styles/cardStyles.css";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/effect-cards";
-import "./stylesCards.css";
+import "./styles/stylesCards.css";
 
 import { EffectCards, Mousewheel } from "swiper";
 import wordSound from "../media/cards/audio.png";
